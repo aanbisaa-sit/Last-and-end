@@ -1,7 +1,8 @@
 import time
 import urllib.error
 import urllib.request
-from .models import CheckResult, Endpoint, utc_now
+from .errors   import RetryExhaustedError, TimeoutError
+from .models   import CheckResult, Endpoint, utc_now
 
 
 def check_endpoint(
@@ -59,10 +60,7 @@ def check_endpoint(
             last_error = exc.__class__.__name__
 
     # All attempts exhausted or deadline hit
-    return CheckResult(
-        endpoint,
-        None,
-        None,
-        utc_now(),
-        error=last_error or "timeout",
+    raise RetryExhaustedError(
+        attempts=retries + 1,
+        last_error=last_error,
     )
