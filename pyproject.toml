@@ -3,6 +3,20 @@ name = "last-and-end"
 version = "0.1.0"
 description = "A lightweight uptime and downtime summary toolkit."
 requires-python = ">=3.10"
+authors = [
+    {name = "aanbisaa-sit", email = "aanbisaa@example.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+keywords = ["uptime", "monitoring", "health-check", "availability"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
