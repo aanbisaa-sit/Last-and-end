@@ -1,0 +1,7 @@
+timeout_seconds = 5
+retries = 1
+
+[[endpoints]]
+name = "homepage"
+url = "https://example.com"
+expected_status = 200
