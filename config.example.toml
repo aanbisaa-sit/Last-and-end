@@ -1,7 +1,47 @@
+# ============================================================
+# Last and End — example configuration file
+# Copy to config.toml and adjust for your own endpoints.
+# ============================================================
+
+# Per-attempt socket timeout in seconds (must be >= 0).
 timeout_seconds = 5
-retries = 1
+
+# Additional retry attempts after the first failure (must be >= 0).
+# 0 = fire once, no retry.  2 = try up to 3 times total.
+retries = 0
+
+# ── Endpoints ──────────────────────────────────────────────────
+# Each entry needs at minimum a `url`.
+# `name` is used in reports; `expected_status` controls what counts as "up".
 
 [[endpoints]]
-name = "homepage"
-url = "https://example.com"
-expected_status = 200
+# A simple homepage check — standard 200 OK.
+name              = "homepage"
+url               = "https://example.com"
+expected_status   = 200
+
+[[endpoints]]
+# An API that always returns 200 for GET /.
+name              = "api-status"
+url               = "https://api.example.com/status"
+expected_status   = 200
+
+[[endpoints]]
+# A liveness endpoint that returns 204 No Content.
+name              = "healthz"
+url               = "https://api.example.com/healthz"
+expected_status   = 204
+
+[[endpoints]]
+# A webhook endpoint that accepts POST — we still GET it for monitoring.
+# Set expected_status to the status code it returns for a HEAD/GET probe.
+name              = "webhook-listener"
+url               = "https://hooks.example.com/ping"
+expected_status   = 200
+
+[[endpoints]]
+# A local service reachable on the same host (no external DNS).
+# Useful for Docker / podman compose health checks.
+name              = "local-api"
+url               = "http://localhost:8080/health"
+expected_status   = 200
