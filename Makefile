@@ -50,6 +50,13 @@ run:
 clean:
 	rm -rf .venv/
 	rm -rf dist/ build/ *.egg-info/
-	rm -f .coverage htmlcov/ .mypy_cache/ .ruff_cache/
+	rm -rf .coverage htmlcov/ .mypy_cache/ .ruff_cache/
 	find . -type d -name __pycache__ -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
+
+# ── build ─────────────────────────────────────────────────────────────────────
+build:
+	$(PY) -m build
+
+publish: build
+	$(PY) -m twine upload dist/*
