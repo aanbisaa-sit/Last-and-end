@@ -119,3 +119,48 @@ def test_preserves_order_of_endpoints(tmp_toml):
     """)
     cfg = load_config(p)
     assert [e.name for e in cfg.endpoints] == ["a", "b", "c"]
+
+
+
+# ── input validation ───────────────────────────────────────────────────────────
+
+def test_negative_timeout_raises_value_error(tmp_toml):
+    p = tmp_toml("""
+    [[endpoints]]
+    name = "svc"
+    url  = "https://svc.example.com"
+
+    timeout_seconds = -1.0
+    """)
+    with pytest.raises(ValueError, match="timeout_seconds"):
+        load_config(p)
+
+
+def test_negative_retries_raises_value_error(tmp_toml):
+    p = tmp_toml("""
+    [[endpoints]]
+    name = "svc"
+    url  = "https://svc.example.com"
+
+    retries = -3
+    """)
+    with pytest.raises(ValueError, match="retries"):
+        load_config(p)
+
+
+def test_zero_timeout_is_allowed(tmp_toml):
+    p = tmp_toml("""
+    [[endpoints]]
+    name = "svc"
+    url  = "https://svc.example.com"
+
+    timeout_seconds = 0.0
+    """)
+    cfg = load_config(p)
+    assert cfg.timeout_seconds == 0.0
+
+
+def test_malformed_toml_raises_configuration_error(tmp_toml):
+    p = tmp_toml("this is [[not valid toml {{{")
+    with pytest.raises(ConfigurationError, match="Invalid TOML"):
+        load_config(p)
