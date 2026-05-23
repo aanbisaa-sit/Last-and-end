@@ -61,7 +61,7 @@ def test_run_checks_timeout_passed_to_checker(
 ):
     seen: list[float] = []
 
-    def fake_check(ep: Endpoint, timeout_seconds: float = 5.0) -> CheckResult:
+    def fake_check(ep: Endpoint, timeout_seconds: float = 5.0, retries: int = 0) -> CheckResult:
         seen.append(timeout_seconds)
         now = datetime.now(timezone.utc)
         return CheckResult(ep, None, None, now, error="TimedOut")
