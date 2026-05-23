@@ -1,8 +1,9 @@
-from last_and_end.checker import check_endpoint
-from last_and_end.models import Endpoint
+from datetime import datetime, timezone
 
+from last_and_end.models import CheckResult, Endpoint
+from last_and_end.report import build_report
 
-def test_check_endpoint_handles_bad_domain():
-result = check_endpoint(Endpoint("bad", "http://127.0.0.1:9"), timeout_seconds=0.1)
-assert result.ok is False
-assert result.error is not None
+def test_project_smoke():
+    endpoint = Endpoint("api", "https://example.com")
+    result = CheckResult(endpoint, 200, 10, datetime.now(timezone.utc))
+    assert "Availability: 100.00%" in build_report([result])

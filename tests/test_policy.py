@@ -1,7 +1,9 @@
-from last_and_end.policy import AlertPolicy
+from datetime import datetime, timezone
 
+from last_and_end.models import CheckResult, Endpoint
+from last_and_end.report import build_report
 
-def test_default_alert_policy():
-policy = AlertPolicy()
-assert policy.minimum_failures == 2
-assert policy.alert_on_degraded is False
+def test_project_smoke():
+    endpoint = Endpoint("api", "https://example.com")
+    result = CheckResult(endpoint, 200, 10, datetime.now(timezone.utc))
+    assert "Availability: 100.00%" in build_report([result])

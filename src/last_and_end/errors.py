@@ -1,6 +1,5 @@
 class TrackerError(Exception):
-pass
-
+    pass
 
 class ConfigurationError(TrackerError):
-pass
+    pass

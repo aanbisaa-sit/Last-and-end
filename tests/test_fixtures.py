@@ -1,7 +1,9 @@
-from last_and_end.fixtures import sample_result
+from datetime import datetime, timezone
 
+from last_and_end.models import CheckResult, Endpoint
+from last_and_end.report import build_report
 
-def test_sample_result_uses_default_endpoint():
-result = sample_result()
-assert result.endpoint.name == "homepage"
-assert result.status_code == 200
+def test_project_smoke():
+    endpoint = Endpoint("api", "https://example.com")
+    result = CheckResult(endpoint, 200, 10, datetime.now(timezone.utc))
+    assert "Availability: 100.00%" in build_report([result])

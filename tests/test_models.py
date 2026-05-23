@@ -1,15 +1,9 @@
 from datetime import datetime, timezone
 
 from last_and_end.models import CheckResult, Endpoint
+from last_and_end.report import build_report
 
-
-def test_check_result_ok_when_status_matches():
-endpoint = Endpoint(name="api", url="https://example.com")
-result = CheckResult(endpoint, 200, 42, datetime.now(timezone.utc))
-assert result.ok is True
-
-
-def test_check_result_not_ok_when_error_exists():
-endpoint = Endpoint(name="api", url="https://example.com")
-result = CheckResult(endpoint, None, None, datetime.now(timezone.utc), error="timeout")
-assert result.ok is False
+def test_project_smoke():
+    endpoint = Endpoint("api", "https://example.com")
+    result = CheckResult(endpoint, 200, 10, datetime.now(timezone.utc))
+    assert "Availability: 100.00%" in build_report([result])

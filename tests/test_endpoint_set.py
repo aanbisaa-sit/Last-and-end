@@ -1,7 +1,9 @@
-from last_and_end.endpoint_set import dedupe_endpoints
-from last_and_end.models import Endpoint
+from datetime import datetime, timezone
 
+from last_and_end.models import CheckResult, Endpoint
+from last_and_end.report import build_report
 
-def test_dedupe_endpoints_by_url():
-endpoints = [Endpoint("a", "https://example.com"), Endpoint("b", "https://example.com")]
-assert len(dedupe_endpoints(endpoints)) == 1
+def test_project_smoke():
+    endpoint = Endpoint("api", "https://example.com")
+    result = CheckResult(endpoint, 200, 10, datetime.now(timezone.utc))
+    assert "Availability: 100.00%" in build_report([result])

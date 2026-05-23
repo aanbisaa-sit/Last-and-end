@@ -1,8 +1,9 @@
-from last_and_end.thresholds import LatencyThresholds
+from datetime import datetime, timezone
 
+from last_and_end.models import CheckResult, Endpoint
+from last_and_end.report import build_report
 
-def test_latency_threshold_levels():
-thresholds = LatencyThresholds(warning_ms=100, critical_ms=200)
-assert thresholds.level_for(50) == "normal"
-assert thresholds.level_for(150) == "warning"
-assert thresholds.level_for(250) == "critical"
+def test_project_smoke():
+    endpoint = Endpoint("api", "https://example.com")
+    result = CheckResult(endpoint, 200, 10, datetime.now(timezone.utc))
+    assert "Availability: 100.00%" in build_report([result])

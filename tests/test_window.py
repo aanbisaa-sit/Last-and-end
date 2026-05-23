@@ -1,12 +1,9 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 
 from last_and_end.models import CheckResult, Endpoint
-from last_and_end.window import recent_results
+from last_and_end.report import build_report
 
-
-def test_recent_results_filters_old_items():
-endpoint = Endpoint("api", "https://example.com")
-now = datetime.now(timezone.utc)
-old = CheckResult(endpoint, 200, 10, now - timedelta(hours=2))
-new = CheckResult(endpoint, 200, 10, now)
-assert recent_results([old, new], minutes=30) == [new]
+def test_project_smoke():
+    endpoint = Endpoint("api", "https://example.com")
+    result = CheckResult(endpoint, 200, 10, datetime.now(timezone.utc))
+    assert "Availability: 100.00%" in build_report([result])

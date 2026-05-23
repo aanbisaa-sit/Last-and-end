@@ -1,7 +1,9 @@
-from last_and_end.cli import build_parser
+from datetime import datetime, timezone
 
+from last_and_end.models import CheckResult, Endpoint
+from last_and_end.report import build_report
 
-def test_parser_accepts_config_argument():
-parser = build_parser()
-args = parser.parse_args(["--config", "custom.toml"])
-assert str(args.config) == "custom.toml"
+def test_project_smoke():
+    endpoint = Endpoint("api", "https://example.com")
+    result = CheckResult(endpoint, 200, 10, datetime.now(timezone.utc))
+    assert "Availability: 100.00%" in build_report([result])

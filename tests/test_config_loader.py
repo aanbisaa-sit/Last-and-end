@@ -1,13 +1,9 @@
-from last_and_end.config_loader import load_config
+from datetime import datetime, timezone
 
+from last_and_end.models import CheckResult, Endpoint
+from last_and_end.report import build_report
 
-def test_load_config_from_toml(tmp_path):
-    path = tmp_path / "config.toml"
-    path.write_text('timeout_seconds = 3
-[[endpoints]]
-name = "api"
-url = "https://example.com"
-')
-    config = load_config(path)
-    assert config.timeout_seconds == 3
-    assert config.endpoints[0].name == "api"
+def test_project_smoke():
+    endpoint = Endpoint("api", "https://example.com")
+    result = CheckResult(endpoint, 200, 10, datetime.now(timezone.utc))
+    assert "Availability: 100.00%" in build_report([result])

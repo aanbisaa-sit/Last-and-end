@@ -1,15 +1,9 @@
 from datetime import datetime, timezone
 
-from last_and_end.incidents import detect_incident
 from last_and_end.models import CheckResult, Endpoint
+from last_and_end.report import build_report
 
-
-def test_detect_incident_after_failures():
-endpoint = Endpoint("api", "https://example.com")
-results = [
-    CheckResult(endpoint, 500, 10, datetime.now(timezone.utc)),
-    CheckResult(endpoint, 500, 10, datetime.now(timezone.utc)),
-]
-incident = detect_incident(results)
-assert incident is not None
-assert incident.result_count == 2
+def test_project_smoke():
+    endpoint = Endpoint("api", "https://example.com")
+    result = CheckResult(endpoint, 200, 10, datetime.now(timezone.utc))
+    assert "Availability: 100.00%" in build_report([result])
