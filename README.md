@@ -2,7 +2,7 @@
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Status: v0.1.0](https://img.shields.io/badge/status-0.1.0-green.svg)]
+[![Status: v0.1.0](https://img.shields.io/badge/status-0.1.0-green.svg)](https://github.com/aanbisaa-sit/Last-and-end/releases)
 
 Last and End is a lightweight uptime and downtime tracker for personal sites,
 small APIs, and lightweight services.
