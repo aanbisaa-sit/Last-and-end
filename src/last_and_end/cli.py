@@ -4,9 +4,13 @@ from .config_loader import load_config
 from .render import render_summary
 from .runner import run_checks
 from .summary import summarize_results
+from . import __version__
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="last-and-end")
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {__version__}"
+    )
     parser.add_argument("--config", type=Path, default=Path("config.example.toml"))
     return parser
 
