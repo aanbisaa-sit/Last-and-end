@@ -1,25 +1,32 @@
 # Makefile — Last and End
 
-.PHONY: test lint typecheck format install clean all
+.PHONY: test lint typecheck format install clean all coverage
 
 SHELL := /bin/bash
 PY := python3
 PIP := pip3
 
-# Default target: run everything useful in development order.
+# Create .venv if it does not exist yet.
+VENV := .venv
+$(VENV): requirements-dev.txt
+	$(PY) -m venv $@
+	$($(VENV)/bin/pip) install -r $<
+
+# Default target: format + lint + typecheck + test.
 all: format lint typecheck test
 
-# ── install ───────────────────────────────────────────────────────────────────
 install:
-	$(PIP) install -e ".[dev]" 2>/dev/null || $(PIP) install -e .
+	$(PIP) install -e . 2>/dev/null || $(PIP) install .
 	$(PIP) install pytest mypy ruff
 
 # ── tests ─────────────────────────────────────────────────────────────────────
 test:
 	$(PY) -m pytest tests/ -v
 
-test-cov:
-	$(PY) -m pytest tests/ --cov=src/last_and_end --cov-report=term-missing
+test-cov: $(VENV)
+	$($(VENV)/bin/pytest) tests/ --cov=src/last_and_end --cov-report=term-missing
+
+coverage: test-cov
 
 # ── lint / typecheck ──────────────────────────────────────────────────────────
 lint:
@@ -28,8 +35,8 @@ lint:
 lint-fix:
 	ruff check --fix src/last_and_end tests/
 
-typecheck:
-	mypy src/last_and_end/
+typecheck: $(VENV)
+	$($(VENV)/bin/mypy) src/last_and_end/
 
 # ── format ────────────────────────────────────────────────────────────────────
 format:
@@ -41,7 +48,8 @@ run:
 
 # ── clean ─────────────────────────────────────────────────────────────────────
 clean:
+	rm -rf .venv/
+	rm -rf dist/ build/ *.egg-info/
+	rm -f .coverage htmlcov/ .mypy_cache/ .ruff_cache/
 	find . -type d -name __pycache__ -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
-	rm -f .coverage htmlcov/ .mypy_cache/ .ruff_cache/
-	rm -rf dist/ build/ *.egg-info/
