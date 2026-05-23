@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `runner.run_checks(config)`: bulk-probe all endpoints from a `TrackerConfig`.
 - `runner.run_endpoint_list(...)`: ad-hoc probe without full config object.
 - `summary.summarize_results(...)`: tally healthy / degraded / down / unknown.
+- `summary.compute_transitions(...)`: diff current vs previous status counts.
 - `render.render_summary(...)`: human-readable status lines.
 - `status.ServiceStatus`: StrEnum (`healthy`, `degraded`, `down`, `unknown`).
 - `classifier.classify_result`: HTTP-code + error → `ServiceStatus`.
@@ -20,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `trends`: health-score delta tracking over time.
 - `serialize`: `result_to_dict` / `result_from_dict` JSON helpers.
 - `availability_ratio`: compute uptime fraction from a result list.
+- `errors.RetryExhaustedError`: raised when all retry attempts fail.
 
 ### Fixed
 - `config_loader`: guard against missing `name` / `url` / `expected_status`
